@@ -20,6 +20,7 @@ function loadWelcomeScreen() {
             <button class="btn" onclick="loadHealthConditions()">Continue</button>
         </div>
     `;
+    addFooter();
 }
 
 function loadHealthConditions() {
@@ -29,7 +30,7 @@ function loadHealthConditions() {
     app.innerHTML = `
         <div class="text-center">
             <h2 class="text-2xl mb-4">Select Your Health Conditions</h2>
-            <div id="conditions-list">
+            <div id="conditions-list" class="mb-4">
                 <!-- Health conditions will be dynamically loaded here -->
             </div>
             <br>
@@ -40,23 +41,25 @@ function loadHealthConditions() {
         </div>
     `;
     loadTopHealthConditions(age, sex);
+    addFooter();
 }
 
 function loadTopHealthConditions(age, sex) {
     const conditionsList = document.getElementById('conditions-list');
     const conditions = getTopHealthConditions(age, sex);
+    conditionsList.innerHTML = ''; // Clear any existing content
     conditions.forEach(condition => {
-        conditionsList.innerHTML += `
-            <div>
-                <input type="checkbox" id="${condition}" name="condition" value="${condition}">
-                <label for="${condition}">${condition}</label>
-            </div>
+        const conditionElement = document.createElement('div');
+        conditionElement.innerHTML = `
+            <input type="checkbox" id="${condition}" name="condition" value="${condition}">
+            <label for="${condition}">${condition}</label>
         `;
+        conditionsList.appendChild(conditionElement);
     });
 }
 
 function getTopHealthConditions(age, sex) {
-    // Dummy data, replace with actual logic
+    // Dummy data, replace with actual logic to fetch conditions
     return ['Condition 1', 'Condition 2', 'Condition 3', 'Condition 4', 'Condition 5', 'Condition 6', 'Condition 7', 'Condition 8', 'Condition 9', 'Condition 10'];
 }
 
@@ -79,7 +82,7 @@ function loadQuestions() {
     app.innerHTML = `
         <div class="text-center">
             <h2 class="text-2xl mb-4">Select Your Questions</h2>
-            <div id="questions-list">
+            <div id="questions-list" class="mb-4">
                 <!-- Questions will be dynamically loaded here -->
             </div>
             <br>
@@ -87,26 +90,31 @@ function loadQuestions() {
         </div>
     `;
     loadQuestionsForConditions(selectedConditions);
+    addFooter();
 }
 
 function loadQuestionsForConditions(conditions) {
     const questionsList = document.getElementById('questions-list');
+    questionsList.innerHTML = ''; // Clear any existing content
     conditions.forEach(condition => {
         const questions = getQuestionsForCondition(condition);
-        questionsList.innerHTML += `
-            <h3 class="text-xl mt-4">${condition}</h3>
-            ${questions.map(question => `
-                <div>
-                    <input type="checkbox" id="${question}" name="question" value="${question}">
-                    <label for="${question}">${question}</label>
-                </div>
-            `).join('')}
-        `;
+        const conditionHeader = document.createElement('h3');
+        conditionHeader.className = 'text-xl mt-4';
+        conditionHeader.innerText = condition;
+        questionsList.appendChild(conditionHeader);
+        questions.forEach(question => {
+            const questionElement = document.createElement('div');
+            questionElement.innerHTML = `
+                <input type="checkbox" id="${question}" name="question" value="${question}">
+                <label for="${question}">${question}</label>
+            `;
+            questionsList.appendChild(questionElement);
+        });
     });
 }
 
 function getQuestionsForCondition(condition) {
-    // Dummy data, replace with actual logic
+    // Dummy data, replace with actual logic to fetch questions
     return ['Question 1', 'Question 2', 'Question 3', 'Question 4', 'Question 5', 'Question 6', 'Question 7', 'Question 8', 'Question 9', 'Question 10'];
 }
 
@@ -116,7 +124,7 @@ function loadSummary() {
     app.innerHTML = `
         <div class="text-center">
             <h2 class="text-2xl mb-4">Questions for Your Healthcare Provider</h2>
-            <div id="summary-list">
+            <div id="summary-list" class="mb-4">
                 <!-- Summary will be dynamically loaded here -->
             </div>
             <br>
@@ -124,16 +132,28 @@ function loadSummary() {
         </div>
     `;
     loadSummaryList(selectedQuestions);
+    addFooter();
 }
 
 function loadSummaryList(questions) {
     const summaryList = document.getElementById('summary-list');
+    summaryList.innerHTML = ''; // Clear any existing content
     questions.forEach(question => {
-        summaryList.innerHTML += `
+        const questionElement = document.createElement('div');
+        questionElement.innerHTML = `
             <h3 class="text-xl mt-4">${question}</h3>
             <p>____________________________________________________________</p>
             <p>____________________________________________________________</p>
             <p>____________________________________________________________</p>
         `;
+        summaryList.appendChild(questionElement);
     });
+}
+
+function addFooter() {
+    const app = document.getElementById('app');
+    const footer = document.createElement('footer');
+    footer.className = 'text-center mt-8';
+    footer.innerHTML = '<p>© Shannon R Gielty, RN</p>';
+    app.appendChild(footer);
 }
