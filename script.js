@@ -163,5 +163,4 @@ function loadSummary() {
     const app = document.getElementById('app');
     app.innerHTML = `
         <div class="text-center">
-            <h2 class="text-2xl mb-4 text-blue-600">Questions for Your Healthcare Provider</h2>
-            <div
+            <h2 class="text
