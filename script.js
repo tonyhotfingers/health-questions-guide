@@ -1,26 +1,44 @@
 // script.js
 document.addEventListener('DOMContentLoaded', () => {
+    checkForUpdates();
     loadWelcomeScreen();
 });
+
+function checkForUpdates() {
+    const lastUpdate = localStorage.getItem('lastUpdate');
+    const now = new Date().getTime();
+    const threeMonths = 1000 * 60 * 60 * 24 * 90;
+
+    if (!lastUpdate || (now - lastUpdate) > threeMonths) {
+        localStorage.setItem('lastUpdate', now);
+        fetchNewData();
+    }
+}
+
+function fetchNewData() {
+    // Replace this with actual data fetching logic
+    console.log('Fetching new data...');
+}
 
 function loadWelcomeScreen() {
     const app = document.getElementById('app');
     app.innerHTML = `
         <div class="text-center">
-            <h1 class="text-4xl mb-4">Welcome to Your Health Questions Guide</h1>
-            <label for="age">Enter your age:</label>
-            <input type="number" id="age" class="border mb-4 p-2">
-            <br>
-            <label for="sex">Select your sex:</label>
-            <select id="sex" class="border mb-4 p-2">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
-            <br>
-            <button class="btn" onclick="loadHealthConditions()">Continue</button>
+            <h1 class="text-4xl mb-4 text-blue-600">Welcome to Your Health Questions Guide</h1>
+            <div class="mb-4">
+                <label for="age" class="block mb-2">Enter your age:</label>
+                <input type="number" id="age" class="border border-gray-300 rounded p-2 w-full">
+            </div>
+            <div class="mb-4">
+                <label for="sex" class="block mb-2">Select your sex:</label>
+                <select id="sex" class="border border-gray-300 rounded p-2 w-full">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+            <button class="btn w-full" onclick="loadHealthConditions()">Continue</button>
         </div>
     `;
-    addFooter();
 }
 
 function loadHealthConditions() {
@@ -29,38 +47,46 @@ function loadHealthConditions() {
     const app = document.getElementById('app');
     app.innerHTML = `
         <div class="text-center">
-            <h2 class="text-2xl mb-4">Select Your Health Conditions</h2>
+            <h2 class="text-2xl mb-4 text-blue-600">Select Your Health Conditions</h2>
             <div id="conditions-list" class="mb-4">
                 <!-- Health conditions will be dynamically loaded here -->
             </div>
-            <br>
-            <label for="condition-search">Search for conditions:</label>
-            <input type="text" id="condition-search" class="border mb-4 p-2" oninput="searchConditions()">
-            <br>
-            <button class="btn" onclick="loadQuestions()">Continue</button>
+            <div class="mb-4">
+                <label for="condition-search" class="block mb-2">Search for conditions:</label>
+                <input type="text" id="condition-search" class="border border-gray-300 rounded p-2 w-full" oninput="searchConditions()">
+            </div>
+            <button class="btn w-full" onclick="loadQuestions()">Continue</button>
         </div>
     `;
     loadTopHealthConditions(age, sex);
-    addFooter();
 }
 
 function loadTopHealthConditions(age, sex) {
     const conditionsList = document.getElementById('conditions-list');
-    const conditions = getTopHealthConditions(age, sex);
-    conditionsList.innerHTML = ''; // Clear any existing content
-    conditions.forEach(condition => {
-        const conditionElement = document.createElement('div');
-        conditionElement.innerHTML = `
-            <input type="checkbox" id="${condition}" name="condition" value="${condition}">
-            <label for="${condition}">${condition}</label>
-        `;
-        conditionsList.appendChild(conditionElement);
+    fetchTopHealthConditions(age, sex).then(conditions => {
+        conditionsList.innerHTML = ''; // Clear any existing content
+        conditions.forEach(condition => {
+            const conditionElement = document.createElement('div');
+            conditionElement.innerHTML = `
+                <input type="checkbox" id="${condition}" name="condition" value="${condition}" class="mr-2">
+                <label for="${condition}">${condition}</label>
+            `;
+            conditionsList.appendChild(conditionElement);
+        });
     });
 }
 
-function getTopHealthConditions(age, sex) {
-    // Dummy data, replace with actual logic to fetch conditions
-    return ['Condition 1', 'Condition 2', 'Condition 3', 'Condition 4', 'Condition 5', 'Condition 6', 'Condition 7', 'Condition 8', 'Condition 9', 'Condition 10'];
+function fetchTopHealthConditions(age, sex) {
+    // Replace with actual API call or logic to fetch top health conditions
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve([
+                'Diabetes', 'Hypertension', 'Asthma', 'Arthritis', 
+                'Heart Disease', 'Chronic Pain', 'Depression', 'Anxiety', 
+                'Obesity', 'COPD'
+            ]);
+        }, 1000);
+    });
 }
 
 function searchConditions() {
@@ -81,41 +107,55 @@ function loadQuestions() {
     const app = document.getElementById('app');
     app.innerHTML = `
         <div class="text-center">
-            <h2 class="text-2xl mb-4">Select Your Questions</h2>
+            <h2 class="text-2xl mb-4 text-blue-600">Select Your Questions</h2>
             <div id="questions-list" class="mb-4">
                 <!-- Questions will be dynamically loaded here -->
             </div>
-            <br>
-            <button class="btn" onclick="loadSummary()">Continue</button>
+            <button class="btn w-full" onclick="loadSummary()">Continue</button>
         </div>
     `;
     loadQuestionsForConditions(selectedConditions);
-    addFooter();
 }
 
 function loadQuestionsForConditions(conditions) {
     const questionsList = document.getElementById('questions-list');
     questionsList.innerHTML = ''; // Clear any existing content
     conditions.forEach(condition => {
-        const questions = getQuestionsForCondition(condition);
-        const conditionHeader = document.createElement('h3');
-        conditionHeader.className = 'text-xl mt-4';
-        conditionHeader.innerText = condition;
-        questionsList.appendChild(conditionHeader);
-        questions.forEach(question => {
-            const questionElement = document.createElement('div');
-            questionElement.innerHTML = `
-                <input type="checkbox" id="${question}" name="question" value="${question}">
-                <label for="${question}">${question}</label>
-            `;
-            questionsList.appendChild(questionElement);
+        fetchQuestionsForCondition(condition).then(questions => {
+            const conditionHeader = document.createElement('h3');
+            conditionHeader.className = 'text-xl mt-4 text-blue-600';
+            conditionHeader.innerText = condition;
+            questionsList.appendChild(conditionHeader);
+            questions.forEach(question => {
+                const questionElement = document.createElement('div');
+                questionElement.innerHTML = `
+                    <input type="checkbox" id="${question}" name="question" value="${question}" class="mr-2">
+                    <label for="${question}">${question}</label>
+                `;
+                questionsList.appendChild(questionElement);
+            });
         });
     });
 }
 
-function getQuestionsForCondition(condition) {
-    // Dummy data, replace with actual logic to fetch questions
-    return ['Question 1', 'Question 2', 'Question 3', 'Question 4', 'Question 5', 'Question 6', 'Question 7', 'Question 8', 'Question 9', 'Question 10'];
+function fetchQuestionsForCondition(condition) {
+    // Replace with actual API call or logic to fetch questions for each condition
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve([
+                `What are the symptoms of ${condition}?`,
+                `What are the treatment options for ${condition}?`,
+                `How can I manage ${condition} with lifestyle changes?`,
+                `Are there any medications for ${condition}?`,
+                `What are the side effects of the medications for ${condition}?`,
+                `How often should I have check-ups for ${condition}?`,
+                `Are there any support groups for ${condition}?`,
+                `What should I do if my condition worsens?`,
+                `What are the risk factors for ${condition}?`,
+                `Can ${condition} affect other parts of my health?`
+            ]);
+        }, 1000);
+    });
 }
 
 function loadSummary() {
@@ -123,37 +163,5 @@ function loadSummary() {
     const app = document.getElementById('app');
     app.innerHTML = `
         <div class="text-center">
-            <h2 class="text-2xl mb-4">Questions for Your Healthcare Provider</h2>
-            <div id="summary-list" class="mb-4">
-                <!-- Summary will be dynamically loaded here -->
-            </div>
-            <br>
-            <button class="btn" onclick="window.print()">Print</button>
-        </div>
-    `;
-    loadSummaryList(selectedQuestions);
-    addFooter();
-}
-
-function loadSummaryList(questions) {
-    const summaryList = document.getElementById('summary-list');
-    summaryList.innerHTML = ''; // Clear any existing content
-    questions.forEach(question => {
-        const questionElement = document.createElement('div');
-        questionElement.innerHTML = `
-            <h3 class="text-xl mt-4">${question}</h3>
-            <p>____________________________________________________________</p>
-            <p>____________________________________________________________</p>
-            <p>____________________________________________________________</p>
-        `;
-        summaryList.appendChild(questionElement);
-    });
-}
-
-function addFooter() {
-    const app = document.getElementById('app');
-    const footer = document.createElement('footer');
-    footer.className = 'text-center mt-8';
-    footer.innerHTML = '<p>© Shannon R Gielty, RN</p>';
-    app.appendChild(footer);
-}
+            <h2 class="text-2xl mb-4 text-blue-600">Questions for Your Healthcare Provider</h2>
+            <div

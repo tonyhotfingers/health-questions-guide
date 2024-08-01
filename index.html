@@ -8,21 +8,53 @@
     <style>
         body {
             font-size: 22px;
-            background-color: #fff5e1;
-            color: #8a6d3b;
+            background-color: #f3f4f6; /* Light grey background for a professional look */
+            color: #1f2937; /* Dark grey text color */
+            font-family: 'Helvetica Neue', Arial, sans-serif;
         }
         .btn {
-            background-color: #d4af37;
+            background-color: #0d6efd; /* Bootstrap primary blue color */
             color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0b5ed7; /* Slightly darker blue on hover */
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #0d6efd;
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #6b7280;
         }
     </style>
 </head>
-<body class="p-6">
-    <div id="app">
-        <!-- Content will be dynamically loaded here -->
+<body>
+    <div class="container">
+        <div class="header">Health Questions Guide</div>
+        <div id="app" class="p-6">
+            <!-- Content will be dynamically loaded here -->
+        </div>
+        <div class="footer">© Shannon R Gielty, RN</div>
     </div>
     <script src="script.js"></script>
 </body>
