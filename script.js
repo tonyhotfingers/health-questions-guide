@@ -1,4 +1,3 @@
-// script.js
 document.addEventListener('DOMContentLoaded', () => {
     checkForUpdates();
     loadWelcomeScreen();
@@ -16,7 +15,6 @@ function checkForUpdates() {
 }
 
 function fetchNewData() {
-    // Replace this with actual data fetching logic
     console.log('Fetching new data...');
 }
 
@@ -64,7 +62,7 @@ function loadHealthConditions() {
 function loadTopHealthConditions(age, sex) {
     const conditionsList = document.getElementById('conditions-list');
     fetchTopHealthConditions(age, sex).then(conditions => {
-        conditionsList.innerHTML = ''; // Clear any existing content
+        conditionsList.innerHTML = '';
         conditions.forEach(condition => {
             const conditionElement = document.createElement('div');
             conditionElement.innerHTML = `
@@ -77,7 +75,6 @@ function loadTopHealthConditions(age, sex) {
 }
 
 function fetchTopHealthConditions(age, sex) {
-    // Replace with actual API call or logic to fetch top health conditions
     return new Promise(resolve => {
         setTimeout(() => {
             resolve([
@@ -119,7 +116,7 @@ function loadQuestions() {
 
 function loadQuestionsForConditions(conditions) {
     const questionsList = document.getElementById('questions-list');
-    questionsList.innerHTML = ''; // Clear any existing content
+    questionsList.innerHTML = '';
     conditions.forEach(condition => {
         fetchQuestionsForCondition(condition).then(questions => {
             const conditionHeader = document.createElement('h3');
@@ -139,7 +136,6 @@ function loadQuestionsForConditions(conditions) {
 }
 
 function fetchQuestionsForCondition(condition) {
-    // Replace with actual API call or logic to fetch questions for each condition
     return new Promise(resolve => {
         setTimeout(() => {
             resolve([
@@ -159,4 +155,9 @@ function fetchQuestionsForCondition(condition) {
 }
 
 function loadSummary() {
-    const selectedQuestions =
+    const selectedQuestions = Array.from(document.querySelectorAll('input[name="question"]:checked')).map(checkbox => checkbox.value);
+    const app = document.getElementById('app');
+    app.innerHTML = `
+        <div class="text-center">
+            <h2 class="text-2xl mb-4 text-blue-600">Your Questions for the Healthcare Provider</h2>
+            <ul class
