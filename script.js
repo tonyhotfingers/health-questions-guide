@@ -159,8 +159,4 @@ function fetchQuestionsForCondition(condition) {
 }
 
 function loadSummary() {
-    const selectedQuestions = Array.from(document.querySelectorAll('input[name="question"]:checked')).map(checkbox => checkbox.value);
-    const app = document.getElementById('app');
-    app.innerHTML = `
-        <div class="text-center">
-            <h2 class="text
+    const selectedQuestions =
